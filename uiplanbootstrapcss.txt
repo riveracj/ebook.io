@@ -1,0 +1,52 @@
+Role: Senior Frontend Engineer & UX/UI Specialist
+Task: Create the complete, production-ready frontend architecture for a modern, multi-page digital eBook marketplace using pure HTML5 and Bootstrap 5. 
+
+Architectural Approach: 
+To ensure a high-end UX/UI interaction pattern, we are avoiding a bloated single-page layout. You will generate the distinct code blocks for 4 separated pages. 
+
+Global Design System Constraints:
+- Framework: Bootstrap 5 (bundled JS/CSS CDNs, Bootstrap Icons).
+- Typography: Modern system sans-serif or Google Font 'Inter' for crisp readability.
+- Palette: High-contrast professional look. Dark charcoal/slate backgrounds for a premium feel, neutral clean white for card containers, and a vibrant primary accent (e.g., Electric Violet or Emerald Green) for CTAs.
+- Quality Gate: Pure semantic HTML, zero broken layouts, active hover/focus states on all interactive elements, and realistic micro-copy (no "Lorem Ipsum").
+
+---
+
+### PAGE 1: Storefront / Catalog Hub (`index.html`)
+- UI Interaction Focus: Content discovery, filtering, and smooth navigation.
+- Layout: 
+  - A sticky global navbar with an active state highlighting "Browse Books" and a dynamic cart icon badge.
+  - A subtle hero header introducing the marketplace catalog.
+  - Two-Column Workspace: Left side features a sticky sidebar panel with filter controls (Categories checkboxes, Search input group, Sort dropdown). Right side features a fluid 3-column responsive grid displaying eBook product cards.
+  - Card Design: Flat-UI design with subtle hover elevation (`box-shadow` transitions), high-res placeholder image for covers, star ratings, price tag, and a secondary action button "View Details".
+- QA Acceptance Criteria: Grid must gracefully transition from 3 columns (Desktop) to 2 columns (Tablet) to 1 column (Mobile) without text clipping.
+
+### PAGE 2: Product Detail Page (`product-detail.html`)
+- UI Interaction Focus: High-conversion depth, deep dives, and explicit trust signals.
+- Layout:
+  - 2-Column Split: Left side displays a large, high-fidelity 3D-angled eBook cover placeholder. Right side displays metadata: Book title (H1), author subline, publication date, "Instant Download" badge, star reviews summary, and a prominent primary accent "Add to Shopping Cart" button.
+  - Tabbed Interface: A native Bootstrap Nav-Tab component containing 3 distinct tabs:
+    1. "Overview" (Long-form book description and target audience).
+    2. "Table of Contents" (Styled list or accordion layout of book chapters).
+    3. "Reviews" (User testimonials with verified buyer tags).
+- QA Acceptance Criteria: Tab switching must function flawlessly without jumping the page scroll.
+
+### PAGE 3: Interactive Shopping Cart (`cart.html`)
+- UI Interaction Focus: Frictionless order review, quantity management, and upselling.
+- Layout:
+  - Main Table/List Area: Rows displaying item thumbnail, book title, format type (PDF/EPUB), quantity selector group, individual price, and a minimal 'trash icon' remove button.
+  - Order Summary Card (Sidebar style): Displays Subtotal, Tax/Processing fee ($0.00 for digital), a functional Promo Code input field with an "Apply" button, the final Grand Total, and a massive "Proceed to Secure Checkout" CTA.
+  - Cross-Sell Section: A "Frequently Bought Together" minimal row at the bottom.
+- QA Acceptance Criteria: Input fields must have clear `:focus` rings. Cart layout must collapse into vertical stack cards on mobile viewports (<576px) so text does not overflow horizontally.
+
+### PAGE 4: Secure Checkout & Success Screen (`checkout.html`)
+- UI Interaction Focus: Security, minimal form friction, and order fulfillment delivery.
+- Layout:
+  - Left Panel: Form fields for "Customer Information" (Email, Name) and "Payment Details" (Styled Stripe-like mock interface with secure pad-lock icons).
+  - Right Panel: A compact sticky summary box of the items being purchased.
+  - Dynamic Post-Purchase Target: Include an alternative, commented-out layout block or a modal structural element representing the "Success / Thank You" screen, complete with a primary "Download eBook Now" button and an automated invoice reference number string.
+- QA Acceptance Criteria: Form fields must leverage native HTML5 validation attributes (`required`, `type="email"`).
+
+---
+
+Deliverable: Provide the clean, well-commented HTML blocks for these individual pages, ensuring the navigation menus are correctly cross-linked (`href="index.html"`, `href="product-detail.html"`, etc.) so the entire flow can be immediately tested in a web browser.

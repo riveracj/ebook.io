@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eBookHub — Shopping Cart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-dark: #395886;
+      --color-steel: #638ecb;
+      --color-sky: #8aaee0;
+      --color-soft: #b1c9ef;
+      --color-light: #d5deef;
+      --color-bg: #f0f3fa;
+      --color-star: #f5b342;
+      --color-star-empty: #d5dce8;
+      --color-hover: #4d7bbd;
+      --color-badge: #dce8f5;
+      --color-hero-end: #e4eaf5;
+    }
+    .btn-primary, .btn-outline-primary:hover { background-color: var(--color-steel) !important; border-color: var(--color-steel) !important; }
+    .btn-primary:hover { background-color: var(--color-hover) !important; border-color: var(--color-hover) !important; }
+    .btn-outline-primary { border-color: var(--color-steel); color: var(--color-steel); }
+    .bg-primary { background-color: var(--color-steel) !important; }
+    .text-primary { color: var(--color-steel) !important; }
+    .text-secondary { color: rgba(57,88,134,0.65) !important; }
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: var(--color-bg); color: var(--color-dark); }
+    .navbar { background: #fff !important; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .navbar-brand { font-weight: 700; letter-spacing: -0.02em; font-size: 1.35rem; }
+    .navbar .nav-link { font-size: 0.95rem; font-weight: 500; padding: 0.5rem 1rem; border-radius: 6px; transition: all 0.2s ease; color: var(--color-dark) !important; }
+    .navbar .navbar-toggler-icon { filter: none; }
+    .navbar .nav-link:hover, .navbar .nav-link.active { background: rgba(57,88,134,0.08); color: var(--color-dark) !important; }
+    .navbar .dropdown-menu { background: #fff; border: 1px solid rgba(57,88,134,0.12); }
+    .navbar .dropdown-item { color: var(--color-dark); }
+    .navbar .dropdown-item:hover { background: rgba(57,88,134,0.06); color: var(--color-dark); }
+    .cart-item { background: #fff; border: 1px solid rgba(57,88,134,0.08); border-radius: 12px; transition: box-shadow 0.25s ease, transform 0.25s ease; }
+    .cart-item:hover { box-shadow: 0 6px 18px rgba(57,88,134,0.08); transform: translateY(-1px); }
+    .cart-item .thumbnail { width: 80px; height: 100px; border-radius: 8px; background: var(--color-soft); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .quantity-input { width: 60px; text-align: center; border: 1px solid rgba(57,88,134,0.2); border-radius: 6px; padding: 0.3rem; }
+    .quantity-input:focus { border-color: var(--color-steel); box-shadow: 0 0 0 3px rgba(99,142,203,0.15); outline: none; }
+    .btn { transition: all 0.2s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .summary-card { position: sticky; top: 5rem; }
+    .cross-sell-item { background: #fff; border-radius: 8px; padding: 0.75rem; transition: box-shadow 0.2s ease, transform 0.2s ease; }
+    .cross-sell-item:hover { box-shadow: 0 6px 16px rgba(57,88,134,0.06); transform: translateY(-1px); }
+    .breadcrumb a { color: var(--color-steel); }
+    .breadcrumb-item.active { color: var(--color-dark); }
+    @media (max-width: 575.98px) {
+      .cart-item { flex-direction: column; text-align: center; }
+      .cart-item .thumbnail { margin: 0 auto 0.75rem; }
+      .cart-item .d-flex.align-items-center { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top py-3">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <img src="asset/images/eBooks.io_Logo_with_Custom_Palette-removebg-preview.png" alt="eBooks.io" height="50">
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Browse</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="index.html">All Books</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="index.html">Fiction</a></li>
+              <li><a class="dropdown-item" href="index.html">Non-Fiction</a></li>
+              <li><a class="dropdown-item" href="index.html">Technology</a></li>
+              <li><a class="dropdown-item" href="index.html">Science</a></li>
+              <li><a class="dropdown-item" href="index.html">Business</a></li>
+              <li><a class="dropdown-item" href="index.html">Self-Help</a></li>
+              <li><a class="dropdown-item" href="index.html">History</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="product-detail.html">Details</a></li>
+          <li class="nav-item"><a class="nav-link active" href="cart.html">Cart</a></li>
+          <li class="nav-item"><a class="nav-link" href="checkout.html">Checkout</a></li>
+        </ul>
+        <div class="d-flex align-items-center gap-3">
+          <a href="cart.html" class="position-relative text-dark text-decoration-none">
+            <i class="bi bi-cart3 fs-5"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary" style="font-size: 0.6rem;">3</span>
+          </a>
+          <a href="#" class="btn btn-primary btn-sm rounded-pill px-3">Sign In</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Breadcrumb -->
+  <div class="container pt-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0 small">
+        <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none">Browse</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Cart</li>
+      </ol>
+    </nav>
+  </div>
+
+  <!-- Page Header -->
+  <div class="container pt-2 pb-2">
+    <h2 class="fw-bold mb-0"><i class="bi bi-cart3 me-2 text-primary"></i>Shopping Cart</h2>
+    <p class="text-secondary small mt-1">3 items in your cart</p>
+  </div>
+
+  <div class="container pb-5">
+    <div class="row g-4">
+
+      <!-- Cart Items -->
+      <div class="col-lg-8">
+
+        <!-- Item 1 -->
+        <div class="cart-item p-3 mb-3 d-flex align-items-center gap-3">
+          <div class="thumbnail overflow-hidden p-0">
+            <img src="asset/images/Science%20Book.png" alt="The Science Book" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+          <div class="flex-grow-1">
+            <h6 class="fw-semibold mb-0">The Science Book</h6>
+            <span class="text-secondary small"><i class="bi bi-filetype-pdf me-1"></i>PDF</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <label for="qty1" class="visually-hidden">Quantity</label>
+            <input type="number" id="qty1" class="quantity-input form-control form-control-sm" value="1" min="1" max="99" style="width: 60px;">
+          </div>
+          <span class="fw-bold text-primary">$19.99</span>
+          <button class="btn btn-outline-danger btn-sm" aria-label="Remove item"><i class="bi bi-trash"></i></button>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="cart-item p-3 mb-3 d-flex align-items-center gap-3">
+          <div class="thumbnail overflow-hidden p-0">
+            <img src="asset/images/Awesome%20Space%20Facts%20for%20Kids.png" alt="Awesome Space Facts for Kids" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+          <div class="flex-grow-1">
+            <h6 class="fw-semibold mb-0">Awesome Space Facts for Kids</h6>
+            <span class="text-secondary small"><i class="bi bi-filetype-epub me-1"></i>EPUB</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <label for="qty2" class="visually-hidden">Quantity</label>
+            <input type="number" id="qty2" class="quantity-input form-control form-control-sm" value="1" min="1" max="99" style="width: 60px;">
+          </div>
+          <span class="fw-bold text-primary">$12.99</span>
+          <button class="btn btn-outline-danger btn-sm" aria-label="Remove item"><i class="bi bi-trash"></i></button>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="cart-item p-3 mb-3 d-flex align-items-center gap-3">
+          <div class="thumbnail">
+            <i class="bi bi-book fs-2 text-secondary"></i>
+          </div>
+          <div class="flex-grow-1">
+            <h6 class="fw-semibold mb-0">Deep Work: Rules for Focus</h6>
+            <span class="text-secondary small"><i class="bi bi-filetype-pdf me-1"></i>PDF</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <label for="qty3" class="visually-hidden">Quantity</label>
+            <input type="number" id="qty3" class="quantity-input form-control form-control-sm" value="2" min="1" max="99" style="width: 60px;">
+          </div>
+          <span class="fw-bold text-primary">$33.98</span>
+          <button class="btn btn-outline-danger btn-sm" aria-label="Remove item"><i class="bi bi-trash"></i></button>
+        </div>
+
+        <!-- Continue Shopping -->
+        <a href="index.html" class="btn btn-outline-primary mt-2"><i class="bi bi-arrow-left me-1"></i>Continue Shopping</a>
+
+        <!-- Cross-Sell -->
+        <section class="mt-4 pt-3 border-top">
+          <h6 class="fw-semibold mb-3"><i class="bi bi-star me-1 text-primary"></i>Frequently Bought Together</h6>
+          <div class="row g-2">
+            <div class="col-md-4">
+              <div class="cross-sell-item border d-flex align-items-center gap-2">
+                <i class="bi bi-book text-secondary fs-4"></i>
+                <div class="small">
+                  <p class="mb-0 fw-semibold">The Neural Labyrinth</p>
+                  <span class="text-secondary">$16.99</span>
+                  <button class="btn btn-sm btn-primary mt-1 py-0 px-2">+ Add</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="cross-sell-item border d-flex align-items-center gap-2">
+                <i class="bi bi-book text-secondary fs-4"></i>
+                <div class="small">
+                  <p class="mb-0 fw-semibold">How Things Work Encyclopedia</p>
+                  <span class="text-secondary">$21.99</span>
+                  <button class="btn btn-sm btn-primary mt-1 py-0 px-2">+ Add</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="cross-sell-item border d-flex align-items-center gap-2">
+                <i class="bi bi-book text-secondary fs-4"></i>
+                <div class="small">
+                  <p class="mb-0 fw-semibold">Space Atlas</p>
+                  <span class="text-secondary">$24.99</span>
+                  <button class="btn btn-sm btn-primary mt-1 py-0 px-2">+ Add</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Order Summary -->
+      <div class="col-lg-4">
+        <div class="card summary-card border-0 shadow-sm">
+          <div class="card-body p-4">
+            <h6 class="fw-bold mb-3">Order Summary</h6>
+            <div class="d-flex justify-content-between mb-2 small">
+              <span class="text-secondary">Subtotal</span>
+              <span>$66.96</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2 small">
+              <span class="text-secondary">Tax</span>
+              <span>$0.00</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2 small">
+              <span class="text-secondary">Processing Fee</span>
+              <span>$0.00</span>
+            </div>
+
+            <div class="mt-3 mb-3">
+              <label for="promoCode" class="form-label small fw-semibold">Promo Code</label>
+              <div class="input-group input-group-sm">
+                <input type="text" class="form-control" id="promoCode" placeholder="Enter code">
+                <button class="btn btn-outline-primary" type="button">Apply</button>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between fw-bold fs-5 pt-2 border-top">
+            <span>Grand Total</span>
+            <span class="text-primary">$66.96</span>
+            </div>
+
+            <a href="checkout.html" class="btn btn-primary w-100 mt-3 py-3 fw-bold"><i class="bi bi-lock-fill me-2"></i>Proceed to Secure Checkout — $66.96</a>
+            <p class="text-center text-secondary small mt-2 mb-0"><i class="bi bi-shield-check me-1 text-success"></i>Secure checkout via SSL</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-top py-4" style="border-color: rgba(80,78,118,0.1) !important;">
+    <div class="container text-center text-secondary small">
+      <p class="mb-0">&copy; 2026 eBookHub. All titles are DRM-free digital downloads.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

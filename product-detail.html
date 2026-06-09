@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eBookHub — The Science Book</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-dark: #395886;
+      --color-steel: #638ecb;
+      --color-sky: #8aaee0;
+      --color-soft: #b1c9ef;
+      --color-light: #d5deef;
+      --color-bg: #f0f3fa;
+      --color-star: #f5b342;
+      --color-star-empty: #d5dce8;
+      --color-hover: #4d7bbd;
+      --color-badge: #dce8f5;
+      --color-hero-end: #e4eaf5;
+    }
+    .btn-primary, .btn-outline-primary:hover { background-color: var(--color-steel) !important; border-color: var(--color-steel) !important; }
+    .btn-primary:hover { background-color: var(--color-hover) !important; border-color: var(--color-hover) !important; }
+    .btn-outline-primary { border-color: var(--color-steel); color: var(--color-steel); }
+    .bg-primary { background-color: var(--color-steel) !important; }
+    .text-primary { color: var(--color-steel) !important; }
+    .text-secondary { color: rgba(57,88,134,0.65) !important; }
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: var(--color-bg); color: var(--color-dark); }
+    .navbar { background: #fff !important; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .navbar-brand { font-weight: 700; letter-spacing: -0.02em; font-size: 1.35rem; }
+    .navbar .nav-link { font-size: 0.95rem; font-weight: 500; padding: 0.5rem 1rem; border-radius: 6px; transition: all 0.2s ease; color: var(--color-dark) !important; }
+    .navbar .navbar-toggler-icon { filter: none; }
+    .navbar .nav-link:hover, .navbar .nav-link.active { background: rgba(57,88,134,0.08); color: var(--color-dark) !important; }
+    .navbar .dropdown-menu { background: #fff; border: 1px solid rgba(57,88,134,0.12); }
+    .navbar .dropdown-item { color: var(--color-dark); }
+    .navbar .dropdown-item:hover { background: rgba(57,88,134,0.06); color: var(--color-dark); }
+    .cover-container { perspective: 1000px; }
+    .cover-3d { transform: rotateY(-6deg) rotateX(3deg); border-radius: 8px; box-shadow: -6px 6px 24px rgba(57,88,134,0.15); transition: transform 0.35s ease; background: var(--color-soft); aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center; }
+    .cover-3d:hover { transform: rotateY(-3deg) rotateX(1deg) scale(1.02); }
+    .badge-download { background: var(--color-badge); color: var(--color-dark); font-weight: 500; font-size: 0.75rem; padding: 0.3em 0.8em; border-radius: 50px; }
+    .star-rating { color: var(--color-star); font-size: 0.9rem; }
+    .star-rating .bi-star { color: var(--color-star-empty); }
+    .nav-tabs .nav-link { color: var(--color-dark); border: none; padding: 0.75rem 1.25rem; font-weight: 500; transition: all 0.2s ease; opacity: 0.6; }
+    .nav-tabs .nav-link:hover { color: var(--color-steel); background: rgba(99,142,203,0.04); opacity: 1; }
+    .nav-tabs .nav-link.active { color: var(--color-steel); background: transparent; border-bottom: 2px solid var(--color-steel); opacity: 1; }
+    .tab-pane { padding-top: 1.5rem; line-height: 1.8; }
+    .chapter-list { list-style: none; padding: 0; }
+    .chapter-list li { padding: 0.6rem 0; border-bottom: 1px solid rgba(57,88,134,0.08); display: flex; align-items: center; }
+    .chapter-list li:last-child { border-bottom: none; }
+    .chapter-list .chapter-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: rgba(99,142,203,0.1); color: var(--color-steel); border-radius: 6px; font-size: 0.75rem; font-weight: 700; margin-right: 0.75rem; flex-shrink: 0; }
+    .review-card { background: #fff; border: 1px solid rgba(57,88,134,0.08); border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem; transition: box-shadow 0.2s ease; }
+    .review-card:hover { box-shadow: 0 4px 16px rgba(57,88,134,0.06); }
+    .review-card .verified-badge { font-size: 0.7rem; background: var(--color-badge); color: var(--color-dark); padding: 0.15em 0.6em; border-radius: 50px; display: inline-block; }
+    .btn { transition: all 0.2s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .related-card { transition: box-shadow 0.25s ease, transform 0.25s ease; }
+    .related-card:hover { box-shadow: 0 8px 24px rgba(57,88,134,0.1); transform: translateY(-2px); }
+    .related-card .card-img-top { height: 160px; background: var(--color-soft); display: flex; align-items: center; justify-content: center; }
+    .breadcrumb a { color: var(--color-steel); }
+    .breadcrumb-item.active { color: var(--color-dark); }
+    @media (max-width: 767.98px) { .cover-3d { transform: none; max-width: 240px; margin: 0 auto; } .cover-3d:hover { transform: scale(1.02); } }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top py-3">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <img src="asset/images/eBooks.io_Logo_with_Custom_Palette-removebg-preview.png" alt="eBooks.io" height="50">
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Browse</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="index.html">All Books</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="index.html">Fiction</a></li>
+              <li><a class="dropdown-item" href="index.html">Non-Fiction</a></li>
+              <li><a class="dropdown-item" href="index.html">Technology</a></li>
+              <li><a class="dropdown-item" href="index.html">Science</a></li>
+              <li><a class="dropdown-item" href="index.html">Business</a></li>
+              <li><a class="dropdown-item" href="index.html">Self-Help</a></li>
+              <li><a class="dropdown-item" href="index.html">History</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link active" href="product-detail.html">Details</a></li>
+          <li class="nav-item"><a class="nav-link" href="cart.html">Cart</a></li>
+          <li class="nav-item"><a class="nav-link" href="checkout.html">Checkout</a></li>
+        </ul>
+        <div class="d-flex align-items-center gap-3">
+          <a href="cart.html" class="position-relative text-dark text-decoration-none">
+            <i class="bi bi-cart3 fs-5"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary" style="font-size: 0.6rem;">3</span>
+          </a>
+          <a href="#" class="btn btn-primary btn-sm rounded-pill px-3">Sign In</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Breadcrumb -->
+  <div class="container pt-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0 small">
+        <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none">Browse</a></li>
+        <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none">Science</a></li>
+        <li class="breadcrumb-item active" aria-current="page">The Science Book</li>
+      </ol>
+    </nav>
+  </div>
+
+  <!-- Product Detail -->
+  <div class="container py-4">
+    <div class="row g-5">
+
+      <!-- Left: Cover -->
+      <div class="col-lg-5">
+        <div class="cover-container">
+          <div class="cover-3d p-0 overflow-hidden">
+            <img src="asset/images/Science%20Book.png" alt="The Science Book cover" class="w-100 h-100" style="object-fit: cover;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Metadata -->
+      <div class="col-lg-7">
+        <span class="badge-download mb-2 d-inline-block"><i class="bi bi-download me-1"></i>Instant Download</span>
+        <h1 class="fw-bold display-6 mb-1">The Science Book: Everything You Need to Know About the World and How It Works</h1>
+        <p class="text-secondary fs-5 mb-2">by <strong>National Geographic</strong></p>
+        <p class="text-secondary mb-2"><i class="bi bi-calendar3 me-1"></i>Published: <strong>October 19, 2021</strong> &middot; <i class="bi bi-file-text me-1 ms-2"></i>448 pages &middot; <i class="bi bi-translate me-1 ms-2"></i>English</p>
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <div class="star-rating">
+            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            <span class="ms-1 text-secondary small">4.7 <span class="text-secondary">(1,383 reviews)</span></span>
+          </div>
+        </div>
+        <p class="text-secondary mb-3">
+          <strong>Formats:</strong> 
+          <span class="badge bg-light text-dark me-1 border">PDF</span>
+          <span class="badge bg-light text-dark me-1 border">EPUB</span>
+          <span class="badge bg-light text-dark border">MOBI</span>
+        </p>
+        <div class="d-flex align-items-center gap-3 mb-4">
+          <span class="fs-2 fw-bold text-primary">$19.99</span>
+        </div>
+        <div class="d-flex gap-3 flex-wrap">
+          <button class="btn btn-primary btn-lg"><i class="bi bi-cart-plus me-2"></i>Add to Shopping Cart</button>
+          <button class="btn btn-outline-primary btn-lg"><i class="bi bi-heart me-2"></i>Add to Wishlist</button>
+        </div>
+        <div class="mt-3 small text-secondary">
+          <i class="bi bi-shield-check me-1 text-success"></i> Secure transaction &middot; 
+          <i class="bi bi-arrow-repeat me-1 ms-2 text-success"></i> 30-day refund guarantee
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tabbed Interface -->
+    <div class="row mt-5">
+      <div class="col-12">
+        <ul class="nav nav-tabs" id="bookTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab" aria-controls="overview" aria-selected="true"><i class="bi bi-bookmark me-1"></i>Overview</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="toc-tab" data-bs-toggle="tab" data-bs-target="#toc" type="button" role="tab" aria-controls="toc" aria-selected="false"><i class="bi bi-list-ol me-1"></i>Table of Contents</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false"><i class="bi bi-chat-square-text me-1"></i>Reviews</button>
+          </li>
+        </ul>
+        <div class="tab-content" id="bookTabsContent">
+
+          <!-- Overview Tab -->
+          <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+            <h5 class="fw-semibold mb-3">About This Book</h5>
+            <p>Unravel the mysteries of the universe with <strong>The Science Book</strong>, a captivating visual guide from National Geographic that answers the biggest questions about our world and beyond. From the infinitesimal workings of atoms to the vast expanse of galaxies, this comprehensive volume breaks down complex scientific concepts into accessible, engaging explanations.</p>
+            <p>Packed with stunning photography, detailed diagrams, and fascinating timelines, this book covers physics, chemistry, biology, astronomy, earth science, and human anatomy. Each chapter reveals how scientific discoveries have shaped our understanding of the world and continue to drive innovation forward.</p>
+            <h6 class="fw-semibold mt-4">Target Audience</h6>
+            <p class="mb-0">Science enthusiasts of all ages, students, educators, and anyone curious about how the natural world works. Perfect for families, classrooms, and lifelong learners.</p>
+          </div>
+
+          <!-- TOC Tab -->
+          <div class="tab-pane fade" id="toc" role="tabpanel" aria-labelledby="toc-tab">
+            <h5 class="fw-semibold mb-3">Table of Contents</h5>
+            <ul class="chapter-list">
+              <li><span class="chapter-num">1</span> The Universe — From the Big Bang to Black Holes</li>
+              <li><span class="chapter-num">2</span> Planet Earth — Geology, Weather, and Oceans</li>
+              <li><span class="chapter-num">3</span> Life on Earth — Evolution and Biodiversity</li>
+              <li><span class="chapter-num">4</span> The Human Body — Anatomy, Health, and the Brain</li>
+              <li><span class="chapter-num">5</span> Chemistry — Elements, Compounds, and Reactions</li>
+              <li><span class="chapter-num">6</span> Physics — Energy, Forces, and Quantum Mechanics</li>
+              <li><span class="chapter-num">7</span> Technology — Innovation and Engineering</li>
+              <li><span class="chapter-num">8</span> Mathematics — Patterns, Logic, and Proof</li>
+              <li><span class="chapter-num">9</span> Climate and Environment</li>
+              <li><span class="chapter-num">10</span> The Future of Science</li>
+            </ul>
+          </div>
+
+          <!-- Reviews Tab -->
+          <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+            <h5 class="fw-semibold mb-3">Reader Reviews</h5>
+
+            <div class="review-card">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                  <span class="fw-semibold">Jennifer Walters</span>
+                  <span class="verified-badge ms-2"><i class="bi bi-patch-check-fill me-1"></i>Verified Purchase</span>
+                </div>
+                <div class="star-rating small">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                </div>
+              </div>
+              <p class="mb-1 small">Absolutely stunning book. The photography alone is worth the price, but the writing is clear, engaging, and thoroughly researched. My 10-year-old and I read a chapter each night and both learn something new every time. National Geographic never disappoints.</p>
+              <span class="text-secondary small">Reviewed on November 15, 2021</span>
+            </div>
+
+            <div class="review-card">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                  <span class="fw-semibold">Michael Torres</span>
+                  <span class="verified-badge ms-2"><i class="bi bi-patch-check-fill me-1"></i>Verified Purchase</span>
+                </div>
+                <div class="star-rating small">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                </div>
+              </div>
+              <p class="mb-1 small">This is the kind of book that makes you fall in love with science all over again. It covers an incredible range of topics without feeling shallow. The infographics and timelines are particularly well done. A fantastic coffee table book that also delivers real substance.</p>
+              <span class="text-secondary small">Reviewed on December 3, 2021</span>
+            </div>
+
+            <div class="review-card">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                  <span class="fw-semibold">Priya Kaur</span>
+                  <span class="verified-badge ms-2"><i class="bi bi-patch-check-fill me-1"></i>Verified Purchase</span>
+                </div>
+                <div class="star-rating small">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                </div>
+              </div>
+              <p class="mb-1 small">Bought this for my classroom and it has been a huge hit. Students gravitate toward the vivid visuals and stay for the well-written explanations. The section on climate change is particularly up-to-date and balanced. Highly recommend for any science teacher.</p>
+              <span class="text-secondary small">Reviewed on January 10, 2022</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Titles -->
+    <section class="mt-5 pt-4 border-top">
+      <h5 class="fw-semibold mb-3">You May Also Like</h5>
+      <div class="row g-3">
+        <div class="col-6 col-md-3">
+          <div class="card related-card h-100 border-0 shadow-sm">
+            <img src="asset/images/Awesome%20Space%20Facts%20for%20Kids.png" class="card-img-top" alt="Awesome Space Facts for Kids" style="object-fit: cover;">
+            <div class="card-body p-2">
+              <p class="card-title small fw-semibold mb-0">Awesome Space Facts for Kids</p>
+              <span class="small text-secondary">$12.99</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card related-card h-100 border-0 shadow-sm">
+            <div class="card-img-top text-secondary"><i class="bi bi-book display-6 opacity-50"></i></div>
+            <div class="card-body p-2">
+              <p class="card-title small fw-semibold mb-0">How Things Work Encyclopedia</p>
+              <span class="small text-secondary">$21.99</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card related-card h-100 border-0 shadow-sm">
+            <div class="card-img-top text-secondary"><i class="bi bi-book display-6 opacity-50"></i></div>
+            <div class="card-body p-2">
+              <p class="card-title small fw-semibold mb-0">Space Atlas</p>
+              <span class="small text-secondary">$24.99</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card related-card h-100 border-0 shadow-sm">
+            <div class="card-img-top text-secondary"><i class="bi bi-book display-6 opacity-50"></i></div>
+            <div class="card-body p-2">
+              <p class="card-title small fw-semibold mb-0">The Body: A Guide for Occupants</p>
+              <span class="small text-secondary">$18.99</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-top py-4 mt-2" style="border-color: rgba(80,78,118,0.1) !important;">
+    <div class="container text-center text-secondary small">
+      <p class="mb-0">&copy; 2026 eBookHub. All titles are DRM-free digital downloads.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
